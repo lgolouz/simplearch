@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ScanningFilesystemDialog.qml</file>
+        <file>qmldir</file>
+        <file>CompressingDialog.qml</file>
+    </qresource>
+</RCC>
