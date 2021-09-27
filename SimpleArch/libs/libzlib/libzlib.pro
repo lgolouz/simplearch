@@ -22,7 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-LIBZLIB_DIR = $${EXTERNAL_DIR}/zlib-1.2.11
+LIBZLIB_DIR = $${EXTERNAL_DIR}/zlib
 
 INCLUDEPATH += \
         $${LIBZLIB_DIR}

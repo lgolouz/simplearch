@@ -136,22 +136,23 @@ void ReadDirThread::readFilesystemDir(const QString& dirName) {
     //emit start-of-work signal
     emit readDirInProgress();
 
-    bool acquiringDirs = true;
     bool reading = true;
-    //Using QScopedPointer as QDirIterator has no assgnment operator
-    QScopedPointer<QDirIterator> it { new QDirIterator (dirName, QDir::AllDirs | QDir::NoDot) };
+    //Using QSharedPointer as QDirIterator has no assgnment operator
+    QVector<QSharedPointer<QDirIterator>> dirIterators {
+        { QSharedPointer<QDirIterator>::create(dirName, QStringList { ".." }) },
+        { QSharedPointer<QDirIterator>::create(dirName, QDir::AllDirs | QDir::NoDotAndDotDot) },
+        { QSharedPointer<QDirIterator>::create(dirName, QDir::Files) }
+    };
+    auto dirIt = QDir(dirName).absolutePath() == "/" ? std::next(dirIterators.begin()) : dirIterators.begin();
     QList<QFileInfoEx> entriesList;
     while (reading) {
         reading = m_reading;
-        if (it->hasNext()) {
-            it->next();
-            entriesList.append(QFileInfoEx(it->fileInfo()));
+        if ((*dirIt)->hasNext()) {
+            (*dirIt)->next();
+            entriesList.append(QFileInfoEx((*dirIt)->fileInfo()));
         } else {
-            if (acquiringDirs) {
-                it.reset(new QDirIterator(dirName, QDir::Files));
-                acquiringDirs = false;
-                //entriesList = filesList;
-            } else {
+            ++dirIt;
+            if (dirIt == dirIterators.end()) {
                 reading = false;
             }
         }
