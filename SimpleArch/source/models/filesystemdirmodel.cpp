@@ -398,7 +398,7 @@ QVariant FilesystemDirModel::data(const QModelIndex& index, int role) const {
             break;
 
         case EntrySizeRole:
-            entryMap.insert(QVariantMap { {"size", entry.isDir() ? QVariant(QString()) : QVariant(entry.size())} });
+            entryMap.insert(QVariantMap { {"size", entry.isDir() ? QVariant(QString()) : QVariant(quint64(entry.size()))} });
             break;
 
         default:
